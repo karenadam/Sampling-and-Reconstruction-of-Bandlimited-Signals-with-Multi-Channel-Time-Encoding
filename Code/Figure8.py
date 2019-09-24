@@ -1,13 +1,11 @@
 from SimulationSettings import *
 from header import *
 import pickle
-from matplotlib.colors import LogNorm
 
 try:
     from ExtraSpecifications import *
 except:
     pass
-import matplotlib.pyplot as plt
 
 
 def new_sig(t, delta_t, Omega):
@@ -53,7 +51,7 @@ def get_M_channel_performance(args):
     b = np.max(np.abs(original_signal)) + 1
     tem = timeEncoder(kappa, delta, b, n_channels=M, integrator_init=integ_init)
     z = tem.encode_precise(c1, c2, Omega, end_time)
-    rec = tem.decode(z, t, Omega, delta_t)
+    rec = tem.decode(z, t, Omega, delta_t, cond_n = 10-10)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -109,15 +107,15 @@ def GetData():
     )
     err_mult = np.transpose(err_mult, (1, 2, 0))
 
-    filename = "Data/Figure8_VarNumChannels.pkl"
+    filename = Data_Path+"Figure8_VarNumChannels.pkl"
     with open(filename, "wb") as f:  # Python 3: open(..., 'wb')
         pickle.dump([err_mult, omega_range, omega_range_string, num_channels], f)
 
 
 def Generate():
-    figure_filename = "Figures/Figure8_VarNumChannels.png"
+    figure_filename = Figure_Path+"Figure8_VarNumChannels.png"
 
-    data_filename = "Data/Figure8_VarNumChannels.pkl"
+    data_filename = Data_Path+"Figure8_VarNumChannels.pkl"
 
     with open(data_filename, "rb") as f:  # Python 3: open(..., 'wb')
         obj = pickle.load(f, encoding="latin1")
@@ -169,4 +167,5 @@ if __name__ == "__main__":
 
     if not os.path.isfile(data_filename):
         GetData()
-    Generate()
+    if (SimulationSettings.graphical_import):
+        Generate()

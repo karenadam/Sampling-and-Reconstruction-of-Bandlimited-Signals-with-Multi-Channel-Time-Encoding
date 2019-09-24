@@ -2,7 +2,8 @@ import numpy as np
 
 graphical_import = True
 
-n_trials = 100
+# should be 100
+n_trials = 1
 n_omega = 12
 n_shifts = 10
 

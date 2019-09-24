@@ -4,8 +4,12 @@ import SimulationSettings
 
 ##### IMPORTING PATHS #####
 import sys
+import os
 
-sys.path.insert(0, "../Multi-Channel-Time-Encoding/Source")
+sys.path.insert(0, os.path.split(os.path.realpath(__file__))[0] + "/../Multi-Channel-Time-Encoding/Source")
+Figure_Path = os.path.split(os.path.realpath(__file__))[0] + "/../Figures/"
+Data_Path = os.path.split(os.path.realpath(__file__))[0] + "/../Data/"
+# sys.path.insert(0, "../Multi-Channel-Time-Encoding/Source")
 
 ##### IMPORT FILES #####
 from Time_Encoder import *
@@ -23,6 +27,7 @@ if SimulationSettings.graphical_import:
     matplotlib.rc("font", family="serif")
     matplotlib.rc("font", size=7)
     matplotlib.rc("text.latex", preamble=r"\usepackage{amsmath}\usepackage{amssymb}")
+    from matplotlib.colors import LogNorm   
 
     # import matplotlib2tikz
 

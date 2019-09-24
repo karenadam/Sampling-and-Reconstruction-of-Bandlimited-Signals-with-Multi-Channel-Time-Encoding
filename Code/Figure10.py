@@ -133,7 +133,7 @@ def GetData():
     err_single = np.reshape(err_single.get(), (n_trials, len(omega_range)))
     err_single = np.transpose(err_single)
 
-    filename = "Data/Figure10_VarShifts.pkl"
+    filename = Data_Path+"Figure10_VarShifts.pkl"
     with open(filename, "wb") as f:  # Python 3: open(..., 'wb')
         pickle.dump(
             [
@@ -150,9 +150,9 @@ def GetData():
 
 def Generate():
 
-    figure_filename = "Figures/Figure10_VarShifts.png"
+    figure_filename = Figure_Path+"Figure10_VarShifts.png"
 
-    data_filename = "Data/Figure10_VarShifts.pkl"
+    data_filename = Data_Path+"Figure10_VarShifts.pkl"
 
     with open(data_filename, "rb") as f:  # Python 3: open(..., 'wb')
         obj = pickle.load(f, encoding="latin1")

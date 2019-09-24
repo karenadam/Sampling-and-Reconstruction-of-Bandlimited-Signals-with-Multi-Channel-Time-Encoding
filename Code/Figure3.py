@@ -94,7 +94,7 @@ def Generate():
     plt.yticks([])
     plt.xlabel("Time (s)")
 
-    plt.savefig("../Figures/Figure3_TEExample.jpg", dpi=300)
+    plt.savefig(Figure_Path+"Figure3_TEExample.jpg", dpi=300)
 
 
 if __name__ == "__main__":

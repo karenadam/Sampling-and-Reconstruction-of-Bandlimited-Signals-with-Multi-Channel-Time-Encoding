@@ -96,7 +96,7 @@ def Generate():
     plt.xlabel("Time (s)")
     plt.xlim(0, 7)
 
-    plt.savefig("../Figures/Figure4_integ_comparison.svg")
+    plt.savefig(Figure_Path+"Figure4_integ_comparison.svg")
 
 
 if __name__ == "__main__":

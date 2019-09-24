@@ -122,7 +122,7 @@ def Generate():
         verticalalignment="center",
     )
     plt.xlabel("Time (s)")
-    plt.savefig("../Figures/Figure7_MChannelRec.png", dpi=300)
+    plt.savefig(Figure_Path+"Figure7_MChannelRec.png", dpi=300)
 
 
 if __name__ == "__main__":

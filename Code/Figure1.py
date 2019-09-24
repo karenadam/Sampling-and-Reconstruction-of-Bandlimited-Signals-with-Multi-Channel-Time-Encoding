@@ -32,7 +32,7 @@ def Generate():
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
-    plt.savefig("../Figures/Figure1_orig_signal.svg")
+    plt.savefig(Figure_Path+"Figure1_orig_signal.svg")
 
     #####   CLASSICALLY SAMPLED   #####
     ###################################
@@ -47,7 +47,7 @@ def Generate():
     plt.ylabel("Amplitude")
     plt.ylim(0, 4)
     plt.xlim(0, 10)
-    plt.savefig("../Figures/Figure1_class_samples.svg")
+    plt.savefig(Figure_Path+"Figure1_class_samples.svg")
 
     #####       TIME ENCODED      #####
     ###################################
@@ -62,7 +62,7 @@ def Generate():
     ax.spines["top"].set_visible(False)
     plt.xlabel("Time (s)")
     plt.ylabel(" ")
-    plt.savefig("../Figures/Figure1_time_encoding.svg")
+    plt.savefig(Figure_Path+"Figure1_time_encoding.svg")
 
     #####    PASSED THROUGH LIF   #####
     ###################################
@@ -118,7 +118,7 @@ def Generate():
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
-    plt.savefig("../Figures/Figure1_LIF_Sampling.svg")
+    plt.savefig(Figure_Path+"Figure1_LIF_Sampling.svg")
 
 
 

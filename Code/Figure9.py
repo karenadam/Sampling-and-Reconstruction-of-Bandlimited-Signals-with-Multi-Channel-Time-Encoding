@@ -1,8 +1,5 @@
 from header import *
 from Time_Encoder import *
-import matplotlib
-from matplotlib import rc
-import matplotlib.pyplot as plt
 
 
 def new_sig(t, delta_t, Omega):
@@ -52,7 +49,7 @@ def Generate():
         15 * np.pi,
     ]
 
-    n_trials = 10
+    n_trials = 100
 
     end_time = 20
     delta_t = 1e-4
@@ -80,15 +77,12 @@ def Generate():
             z_half = t_half.encode(original_signal, delta_t)
             z_quarter = t_quarter.encode(original_signal, delta_t)
             z_eighth = t_eighth.encode(original_signal, delta_t)
-            # print(z_half)
-            # print(z_eighth)
 
-            rec_single = t_single.decode(z_single, t, Omega, delta_t)
-            rec_half = t_half.decode(z_half, t, Omega, delta_t)
-            rec_quarter = t_quarter.decode(z_quarter, t, Omega, delta_t)
-            rec_eighth = t_eighth.decode(z_eighth, t, Omega, delta_t)
+            rec_single = t_single.decode(z_single, t, Omega, delta_t, cond_n = 1e-10)
+            rec_half = t_half.decode(z_half, t, Omega, delta_t, cond_n = 1e-10)
+            rec_quarter = t_quarter.decode(z_quarter, t, Omega, delta_t, cond_n = 1e-10)
+            rec_eighth = t_eighth.decode(z_eighth, t, Omega, delta_t, cond_n = 1e-10)
 
-            # print(np.linalg.norm((rec_half-rec_eighth)[five_percent:-five_percent])/(len(t)*0.9))
 
             err_single[o, n] = np.linalg.norm(
                 (original_signal - rec_single)[five_percent:-five_percent]
@@ -103,9 +97,6 @@ def Generate():
                 (original_signal - rec_eighth)[five_percent:-five_percent]
             ) / (len(t) * 0.9)
 
-    # import pickle
-    # with open('Different_shifts_April27.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
-    #    pickle.dump([error1, error2,errorN], f)
 
     plt.rcParams["figure.figsize"] = [8, 3]
     plt.rcParams["font.family"] = "Times New Roman"
@@ -149,7 +140,7 @@ def Generate():
     plt.ylabel("Reconstruction error")
 
     plt.legend(loc="lower right")
-    plt.savefig("Figures/Figure9.png")
+    plt.savefig(Figure_Path+"Figure9.png")
 
 
 if __name__ == "__main__":
