@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 from brian2 import *
+prefs.codegen.target = 'numpy' 
 from matplotlib import rc
 
 
@@ -37,7 +38,7 @@ def Generate():
     ###################################
 
     plt.figure()
-    plt.stem(sampled_time, sampled_signal)
+    plt.stem(sampled_time, sampled_signal, use_line_collection = True)
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -55,7 +56,7 @@ def Generate():
     z = t.encode(signal, delta_t)
     spikes = z.get_spikes_of(0)
     plt.figure()
-    plt.stem(spikes, np.ones_like(spikes))
+    plt.stem(spikes, np.ones_like(spikes), use_line_collection = True)
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -65,7 +66,6 @@ def Generate():
 
     #####    PASSED THROUGH LIF   #####
     ###################################
-
     @check_units(v=volt, tol=1, result=volt / (second ** 2))
     def dirac(v):
         if (v >= -1e-4 * volt) and (v <= 1e-4 * volt):
@@ -119,6 +119,7 @@ def Generate():
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     plt.savefig("../Figures/Figure1_LIF_Sampling.svg")
+
 
 
 if __name__ == "__main__":
