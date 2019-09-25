@@ -51,7 +51,7 @@ def get_two_channel_performance(args):
         kappa, delta, b, n_channels=2, integrator_init=[-delta, -delta + shift * delta]
     )
     z = tem.encode_precise(c1, c2, Omega, end_time)
-    rec = tem.decode(z, t, Omega, delta_t, cond_n = 10-10)
+    rec = tem.decode(z, t, Omega, delta_t)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
