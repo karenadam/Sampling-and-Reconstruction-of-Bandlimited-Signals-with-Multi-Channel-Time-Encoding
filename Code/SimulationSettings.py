@@ -7,7 +7,7 @@ n_trials = 4
 n_omega = 12
 #should be 10
 n_shifts = 10
-n_shifts = 4
+# n_shifts = 4
 
 
 omega_range = [0.25 * np.pi]
@@ -67,19 +67,6 @@ omega_range_M_channels_string = [
     r"$19\pi$",
     r"$20\pi$",
 ]
-
-
-num_channels = [1, 2, 3, 4]#, 5]#, 6, 7, 8, 9, 10]
-omega_range_M_channels = np.arange(1 * np.pi, 9 * np.pi, np.pi)
-omega_range_M_channels_string = [
-    r"$\pi$",
-    r"$2\pi$",
-    r"$3\pi$",
-    r"$4\pi$",
-    r"$5\pi$",
-    r"$6\pi$",
-    r"$7\pi$",
-    r"$8\pi$"]
 
 delta_t = 1e-4
 end_time = 20
