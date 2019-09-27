@@ -3,10 +3,10 @@ import numpy as np
 graphical_import = True
 
 # should be 100
-n_trials = 4
+n_trials = 100
 n_omega = 12
 #should be 10
-n_shifts = 10
+n_shifts = 20
 # n_shifts = 4
 
 
@@ -34,13 +34,11 @@ shifts_range_string = [r"$1$"]
 for i in range(n_shifts):
     shifts.append(shifts[-1] / np.sqrt(10))
     if i == 0:
-        shifts_range_string.append(r"$\sqrt{{10}}\pi$")
-    elif i == 1:
-        shifts_range_string.append(r"$\pi$")
+        shifts_range_string.append(r"$\sqrt{{10}}$")
     elif i % 2 == 1:
-        shifts_range_string.append("$10^{0}\sqrt{{10}}\pi$".format(-int(i / 2)))
+        shifts_range_string.append(r"$10^{0}$".format(-int((i+1) / 2)))
     else:
-        shifts_range_string.append("$10^{0}\pi$".format(-int(i / 2)))
+        shifts_range_string.append(r"$10^{0}\sqrt{{10}}$".format(-int(i / 2)))
 
 num_channels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 omega_range_M_channels = np.arange(1 * np.pi, 21 * np.pi, np.pi)

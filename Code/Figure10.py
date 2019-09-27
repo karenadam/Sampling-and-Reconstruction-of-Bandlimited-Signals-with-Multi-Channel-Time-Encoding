@@ -76,7 +76,7 @@ def get_single_channel_performance(args):
     b = np.max(np.abs(original_signal)) + 1
     tem = timeEncoder(kappa, delta, b, n_channels=1)
     z = tem.encode_precise(c1, c2, Omega, end_time)
-    rec = tem.decode(z, t, Omega, delta_t, cond_n = 10-10)
+    rec = tem.decode(z, t, Omega, delta_t)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -84,6 +84,8 @@ def get_single_channel_performance(args):
 
 
 def GetData():
+
+    np.random.seed(0)
 
     kappa = 1
     delta = 1
