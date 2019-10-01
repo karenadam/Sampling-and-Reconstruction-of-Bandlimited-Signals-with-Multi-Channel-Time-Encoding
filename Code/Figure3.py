@@ -9,10 +9,11 @@ from matplotlib import rc
 
 def Generate():
 
-    matplotlib.rc("text", usetex=True)
-    matplotlib.rc("font", family="serif")
-    matplotlib.rc("font", size=12)
-    matplotlib.rc("text.latex", preamble=r"\usepackage{amsmath}\usepackage{amssymb}")
+    if(not SimulationSettings.To_Svg):
+        matplotlib.rc("text", usetex=True)
+        matplotlib.rc("font", family="serif")
+        matplotlib.rc("font", size=12)
+        matplotlib.rc("text.latex", preamble=r"\usepackage{amsmath}\usepackage{amssymb}")
 
     # matplotlib.rcParams['mathtext.fontset'] = 'stix'
     delta_t = 1e-2
@@ -94,7 +95,13 @@ def Generate():
     plt.yticks([])
     plt.xlabel("Time (s)")
 
-    plt.savefig(Figure_Path+"Figure3_TEExample.jpg", dpi=300)
+    if SimulationSettings.To_Svg:
+        figure_filename = Figure_Path+"Figure3_TEExample.svg"
+        fig.savefig(figure_filename)
+    else:
+        figure_filename = Figure_Path+"Figure3_TEExample.png"
+        fig.savefig(figure_filename, dpi=600)
+
 
 
 if __name__ == "__main__":

@@ -122,7 +122,13 @@ def Generate():
         verticalalignment="center",
     )
     plt.xlabel("Time (s)")
-    plt.savefig(Figure_Path+"Figure7_MChannelRec.png", dpi=300)
+    
+    if SimulationSettings.To_Svg:
+        figure_filename = Figure_Path+"Figure7_MChannelRec.svg"
+        fig.savefig(figure_filename)
+    else:
+        figure_filename = Figure_Path+"Figure7_MChannelRec.png"
+        fig.savefig(figure_filename, dpi=600)
 
 
 if __name__ == "__main__":

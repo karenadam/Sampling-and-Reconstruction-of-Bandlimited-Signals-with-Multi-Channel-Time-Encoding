@@ -3,7 +3,6 @@ from Time_Encoder import *
 import matplotlib
 import matplotlib.pyplot as plt
 
-from brian2 import *
 from matplotlib import rc
 
 
@@ -34,14 +33,13 @@ def Generate():
 
     spikes, int_seq = t1.encode(original_signal, delta_t, with_integral_probe=True)
 
-    from matplotlib import rc
-
-    plt.rcParams["figure.figsize"] = [8, 6]
-    plt.rcParams["font.family"] = "Times New Roman"
-    plt.rcParams["font.weight"] = "light"
-    plt.rcParams["font.size"] = "12"
-    plt.rcParams["mathtext.it"] = "Times New Roman"
-    plt.rcParams["mathtext.default"] = "regular"
+    if (not SimulationSettings.To_Svg):
+        plt.rcParams["figure.figsize"] = [8, 6]
+        plt.rcParams["font.family"] = "Times New Roman"
+        plt.rcParams["font.weight"] = "light"
+        plt.rcParams["font.size"] = "12"
+        plt.rcParams["mathtext.it"] = "Times New Roman"
+        plt.rcParams["mathtext.default"] = "regular"
 
     plt.figure()
     fig, axarr = plt.subplots(4, 1)
@@ -96,7 +94,12 @@ def Generate():
     plt.xlabel("Time (s)")
     plt.xlim(0, 7)
 
-    plt.savefig(Figure_Path+"Figure4_integ_comparison.svg")
+    if SimulationSettings.To_Svg:
+        figure_filename = Figure_Path+"Figure4_integ_comparison.svg"
+        fig.savefig(figure_filename)
+    else:
+        figure_filename = Figure_Path+"Figure4_integ_comparison.png"
+        fig.savefig(figure_filename, dpi=600)
 
 
 if __name__ == "__main__":

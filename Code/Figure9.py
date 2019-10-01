@@ -2,6 +2,7 @@ from header import *
 from Time_Encoder import *
 
 
+
 def new_sig(t, delta_t, Omega):
     T = np.pi / Omega
     T_WIDTH = int(T / delta_t)
@@ -22,7 +23,7 @@ def new_sig(t, delta_t, Omega):
     return x, sinc_loc, sinc_amp
 
 
-def Generate():
+def GetData():
     np.random.seed(0)
 
     kappa = 1
@@ -99,6 +100,38 @@ def Generate():
             ) / (len(t) * 0.9)
 
 
+    import pickle
+
+    filename = Data_Path+"Figure9_single_versus_double.pkl"
+    
+    with open(filename, "wb") as f:  # Python 3: open(..., 'wb')
+        pickle.dump(
+            [
+                err_single,
+                err_half,
+                err_quarter,
+                err_eighth,
+                OMEGA_RANGE,
+            ],
+            f,
+        )
+
+
+def Generate():    
+
+    data_filename = Data_Path+"Figure9_single_versus_double.pkl"
+
+    with open(data_filename, "rb") as f:  # Python 3: open(..., 'wb')
+        obj = pickle.load(f, encoding="latin1")
+
+
+    err_single = obj[0]
+    err_half = obj[1]
+    err_quarter = obj[2]
+    err_eighth = obj[3]
+    OMEGA_RANGE = obj[4]
+
+
     plt.rcParams["figure.figsize"] = [8, 3]
     plt.rcParams["font.family"] = "Times New Roman"
     plt.rcParams["font.weight"] = "light"
@@ -141,8 +174,20 @@ def Generate():
     plt.ylabel("Reconstruction error")
 
     plt.legend(loc="lower right")
-    plt.savefig(Figure_Path+"Figure9.png")
+
+    if SimulationSettings.To_Svg:
+        figure_filename = Figure_Path+"Figure9.svg"
+        fig.savefig(figure_filename)
+    else:
+        figure_filename = Figure_Path+"Figure9.png"
+        fig.savefig(figure_filename, dpi=600)
 
 
 if __name__ == "__main__":
-    Generate()
+
+    data_filename = "Data/Figure9_single_versus_double.pkl"
+
+    if not os.path.isfile(data_filename):
+        GetData()
+    if (SimulationSettings.graphical_import):
+        Generate()

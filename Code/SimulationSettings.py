@@ -1,9 +1,10 @@
 import numpy as np
 
 graphical_import = True
+To_Svg = True
 
 # should be 100
-n_trials = 100
+n_trials = 5
 n_omega = 12
 #should be 10
 n_shifts = 20
@@ -68,3 +69,9 @@ omega_range_M_channels_string = [
 
 delta_t = 1e-4
 end_time = 20
+
+
+noise_range = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]
+noise_range_string = [r"$10^{-5}$",r"$10^{-4}$",r"$10^{-3}$",r"$10^{-2}$",r"$10^{-1}$",r"$1$"]
+SNR_range_string = ["50 dB","40 dB","30 dB","20 dB","10 dB","0 dB"]
+Omega_var_noise = 2*np.pi

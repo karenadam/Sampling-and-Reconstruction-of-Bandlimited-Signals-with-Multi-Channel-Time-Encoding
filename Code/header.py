@@ -24,10 +24,15 @@ if SimulationSettings.graphical_import:
     import matplotlib.pyplot as plt
     from matplotlib import rc
 
-    matplotlib.rc("text", usetex=True)
-    matplotlib.rc("font", family="serif")
-    matplotlib.rc("font", size=7)
-    matplotlib.rc("text.latex", preamble=r"\usepackage{amsmath}\usepackage{amssymb}")
+    if SimulationSettings.To_Svg:
+        plt.rc('text', usetex=False)
+        plt.rc('text.latex', unicode = False)
+        plt.rc('svg',fonttype = 'none')
+    else:
+        matplotlib.rc("text", usetex=True)
+        matplotlib.rc("font", family="serif")
+        matplotlib.rc("font", size=7)
+        matplotlib.rc("text.latex", preamble=r"\usepackage{amsmath}\usepackage{amssymb}")
     from matplotlib.colors import LogNorm   
 
     import seaborn as sns

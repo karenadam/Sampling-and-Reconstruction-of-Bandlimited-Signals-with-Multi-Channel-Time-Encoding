@@ -125,7 +125,6 @@ def Generate():
     omega_range_string = obj[2] 
     number_of_channels = obj[3]
 
-    print(number_of_channels)
  
         
     data = np.mean(err_Mult,2)
@@ -143,7 +142,14 @@ def Generate():
     axes.set_yticks(np.arange(0,len(omega_range),2))
     axes.vlines(21, *axes.get_ylim(), color = 'yellow', linestyle = '--')
     fig.subplots_adjust(bottom = 0.2)
-    fig.savefig(figure_filename, dpi = 600)
+
+    if To_Svg:
+        figure_filename = Figure_Path+"Figure8_VarNumChannels.svg"
+        fig.savefig(figure_filename)
+    else:
+        figure_filename = Figure_Path+"Figure8_VarNumChannels.png"
+        fig.savefig(figure_filename, dpi=600)
+
 
 
 

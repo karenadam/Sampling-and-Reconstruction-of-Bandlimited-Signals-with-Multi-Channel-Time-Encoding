@@ -1,7 +1,6 @@
 from SimulationSettings import *
 from header import *
 import pickle
-from matplotlib.colors import LogNorm
 
 try:
     from ExtraSpecifications import *
@@ -50,8 +49,8 @@ def get_two_channel_performance(args):
     tem = timeEncoder(
         kappa, delta, b, n_channels=2, integrator_init=[-delta, -delta + shift * delta]
     )
-    z = tem.encode_precise(c1, c2, Omega, end_time)
-    rec = tem.decode(z, t, Omega, delta_t, tol=1e-15)
+    z = tem.encode_precise(c1, c2, Omega, end_time, tol=1e-15)
+    rec = tem.decode(z, t, Omega, delta_t)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -75,8 +74,8 @@ def get_single_channel_performance(args):
     Omega = omega_range[o]
     b = np.max(np.abs(original_signal)) + 1
     tem = timeEncoder(kappa, delta, b, n_channels=1)
-    z = tem.encode_precise(c1, c2, Omega, end_time)
-    rec = tem.decode(z, t, Omega, delta_t, tol=1e-15)
+    z = tem.encode_precise(c1, c2, Omega, end_time, tol=1e-15)
+    rec = tem.decode(z, t, Omega, delta_t)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -152,7 +151,6 @@ def GetData():
 
 def Generate():
 
-    figure_filename = Figure_Path+"Figure10_VarShifts.png"
 
     data_filename = Data_Path+"Figure10_VarShifts.pkl"
 
@@ -200,10 +198,18 @@ def Generate():
     fig = sns_map.get_figure()
     axes = fig.gca()
     axes.set_xticks([0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22])
+    plt.yticks(rotation = 0)
     axes.set_yticks([0, 2, 4, 6, 8, 10, 12])
     axes.vlines(21, *axes.get_ylim(), color="yellow", linestyle="--")
     fig.subplots_adjust(bottom=0.2)
-    fig.savefig(figure_filename, dpi=600)
+
+
+    if To_Svg:
+        figure_filename = Figure_Path+"Figure10_VarShifts.svg"
+        fig.savefig(figure_filename)
+    else:
+        figure_filename = Figure_Path+"Figure10_VarShifts.png"
+        fig.savefig(figure_filename, dpi=600)
 
 
 if __name__ == "__main__":
@@ -212,4 +218,5 @@ if __name__ == "__main__":
 
     if not os.path.isfile(data_filename):
         GetData()
-    Generate()
+    if (SimulationSettings.graphical_import):
+        Generate()
