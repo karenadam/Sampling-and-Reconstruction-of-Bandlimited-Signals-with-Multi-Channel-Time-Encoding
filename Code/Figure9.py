@@ -23,6 +23,7 @@ def new_sig(t, delta_t, Omega):
 
 
 def Generate():
+    np.random.seed(0)
 
     kappa = 1
     delta = 1

@@ -58,6 +58,7 @@ def get_M_channel_performance(args):
 
 
 def GetData():
+    np.random.seed(0)
     signals = []
     sinc_loc = []
     sinc_amp = []
