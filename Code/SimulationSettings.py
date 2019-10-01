@@ -1,7 +1,7 @@
 import numpy as np
 
 graphical_import = True
-To_Svg = True
+To_Svg = False
 
 # should be 100
 n_trials = 5
