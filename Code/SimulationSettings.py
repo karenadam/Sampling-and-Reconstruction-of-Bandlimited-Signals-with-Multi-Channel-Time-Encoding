@@ -4,11 +4,11 @@ graphical_import = True
 To_Svg = False
 
 # should be 100
-n_trials = 5
-n_omega = 12
-#should be 10
-n_shifts = 20
-# n_shifts = 4
+n_trials = 100
+# n_omega = 12
+n_omega = 10
+# n_shifts = 20
+n_shifts = 16
 
 
 omega_range = [0.25 * np.pi]
@@ -23,10 +23,10 @@ omega_range_string = [
     r"$2\sqrt{2}\pi$",
     r"$4\pi$",
     r"$4\sqrt{2}\pi$",
-    r"$8\pi$",
-    r"$8\sqrt{2}\pi$",
-    r"$16\pi$",
-]
+    r"$8\pi$"]#,
+#     r"$8\sqrt{2}\pi$",
+#     r"$16\pi$",
+# ]
 for i in range(n_omega):
     omega_range.append(omega_range[-1] * np.sqrt(2))
 
@@ -34,6 +34,7 @@ shifts = [1]
 shifts_range_string = [r"$1$"]
 for i in range(n_shifts):
     shifts.append(shifts[-1] / np.sqrt(10))
+    # shifts.append(shifts[-1] / 10)
     if i == 0:
         shifts_range_string.append(r"$\sqrt{{10}}$")
     elif i % 2 == 1:

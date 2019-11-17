@@ -24,19 +24,19 @@ def new_sig(t, delta_t, Omega):
 
 
 def GetData():
-    np.random.seed(0)
+    np.random.seed(1)
 
     kappa = 1
     delta = 1
     b = 1
 
-    t_single = timeEncoder(kappa, delta, b, n_channels=1)
-    t_half = timeEncoder(kappa, delta, b, n_channels=2, integrator_init=[-delta, 0])
+    t_single = timeEncoder(kappa, delta, b, [1])
+    t_half = timeEncoder(kappa, delta/2, b, [[1]] )
     t_quarter = timeEncoder(
-        kappa, delta, b, n_channels=2, integrator_init=[-delta, -0.5 * delta]
+        kappa, delta, b, [[1]]*2, integrator_init=[-delta, -0.5 * delta]
     )
     t_eighth = timeEncoder(
-        kappa, delta, b, n_channels=2, integrator_init=[-delta, -0.75 * delta]
+        kappa, delta, b, [[1]]*2, integrator_init=[-delta, -0.75 * delta]
     )
 
     OMEGA_RANGE = [
@@ -51,7 +51,7 @@ def GetData():
         15 * np.pi,
     ]
 
-    n_trials = 100
+    n_trials = 10
 
     end_time = 20
     delta_t = 1e-4

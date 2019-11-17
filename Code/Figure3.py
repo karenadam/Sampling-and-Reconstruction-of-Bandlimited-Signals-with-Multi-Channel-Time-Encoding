@@ -32,7 +32,7 @@ def Generate():
 
     x_b = x + b
     int_x_b = (np.cumsum(x_b) * delta_t / kappa) % (2 * delta) - delta
-    tem = timeEncoder(kappa, delta, b)
+    tem = timeEncoder(kappa, delta, b, [1])
     z = tem.encode(x, delta_t)
     spikes = z.get_spikes_of(0)
     plt.figure()

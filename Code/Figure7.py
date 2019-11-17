@@ -46,13 +46,13 @@ def Generate():
     y = sample_signal(t, c1, c2) + 1
     b = np.max(np.abs(y)) + 1
 
-    tem_double = timeEncoder(kappa, delta, b, n_channels=2, integrator_init=[-delta, 0])
+    tem_double = timeEncoder(kappa, delta, b, [[1]]*2, integrator_init=[-delta, 0])
     spikes_double = tem_double.encode(y, delta_t)
 
     rec_dbl = tem_double.decode(spikes_double, t, omega, delta_t)
 
     spikes_single = spikes_double.get_spikes_of(0, asSpikeTimesObject=True)
-    tem_single = timeEncoder(kappa, delta, b)
+    tem_single = timeEncoder(kappa, delta, b, [1])
     rec2 = tem_single.decode(spikes_single, t, omega, delta_t)
 
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]

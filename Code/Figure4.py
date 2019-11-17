@@ -22,12 +22,13 @@ def Generate():
     b = 6
     kappa = 1
     delta = 2
+    mixing_matrix = [[1]]*2
     num_channels = 2
     t1 = timeEncoder(
         kappa,
         delta,
         b,
-        n_channels=num_channels,
+        mixing_matrix,
         integrator_init=[-delta, -0.25 * delta],
     )
 

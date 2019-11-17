@@ -47,9 +47,9 @@ def get_M_channel_performance(args):
     b = np.max(np.abs(original_signal)) + 1
     integ_init = np.arange(-delta, delta, 2 * delta / M).tolist()
 
-    tem2 = timeEncoder(kappa, delta, b, n_channels=M, integrator_init=integ_init)
+    tem2 = timeEncoder(kappa, delta, b, [[1]]*M, integrator_init=integ_init)
     spikes = tem2.encode(original_signal, delta_t)
-    rec = tem2.decode(spikes, t, Omega, delta_t)
+    rec = tem2.decode(spikes, t, Omega, delta_t, cond_n = 1e-12)
     # rec = tem.decode(z2, t, Omega, delta_t)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9

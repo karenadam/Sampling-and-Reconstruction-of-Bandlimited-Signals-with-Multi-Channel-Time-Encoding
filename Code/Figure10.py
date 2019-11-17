@@ -47,10 +47,11 @@ def get_two_channel_performance(args):
     Omega = omega_range[o]
     b = np.max(np.abs(original_signal)) + 1
     tem = timeEncoder(
-        kappa, delta, b, n_channels=2, integrator_init=[-delta, -delta + shift * delta]
+        kappa, delta, b, [[1]]*2, integrator_init=[-delta, -delta + shift * delta]
     )
-    z = tem.encode_precise(c1, c2, Omega, end_time, tol=1e-15)
-    rec = tem.decode(z, t, Omega, delta_t)
+    sig = bandlimitedSignal(t, delta_t, Omega, sinc_locs=c1, sinc_amps=c2)
+    z = tem.encode_precise(sig, Omega, end_time, tol=1e-15)
+    rec = tem.decode(z, t, Omega, delta_t, cond_n=1e-12)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -73,9 +74,10 @@ def get_single_channel_performance(args):
 
     Omega = omega_range[o]
     b = np.max(np.abs(original_signal)) + 1
-    tem = timeEncoder(kappa, delta, b, n_channels=1)
-    z = tem.encode_precise(c1, c2, Omega, end_time, tol=1e-15)
-    rec = tem.decode(z, t, Omega, delta_t)
+    tem = timeEncoder(kappa, delta, b, [[1]])
+    sig = bandlimitedSignal(t, delta_t, Omega, sinc_locs=c1, sinc_amps=c2)
+    z = tem.encode_precise(sig, Omega, end_time, tol=1e-15)
+    rec = tem.decode(z, t, Omega, delta_t, cond_n = 1e-12)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -197,10 +199,10 @@ def Generate():
     sns_map.set_title("Reconstruction Error")
     fig = sns_map.get_figure()
     axes = fig.gca()
-    axes.set_xticks([0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22])
+    axes.set_xticks([0, 2, 4, 6, 8, 10, 12, 14, 16, 18])
     plt.yticks(rotation = 0)
-    axes.set_yticks([0, 2, 4, 6, 8, 10, 12])
-    axes.vlines(21, *axes.get_ylim(), color="yellow", linestyle="--")
+    axes.set_yticks([0, 2, 4, 6, 8, 10])
+    axes.vlines(17, *axes.get_ylim(), color="yellow", linestyle="--")
     fig.subplots_adjust(bottom=0.2)
 
 
