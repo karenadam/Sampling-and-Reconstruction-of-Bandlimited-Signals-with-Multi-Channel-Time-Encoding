@@ -1,4 +1,5 @@
 from SimulationSettings import *
+from SimulationSettings import Omega_var_noise as Omega
 from header import *
 import pickle
 
@@ -31,7 +32,7 @@ def new_sig(t, delta_t, Omega):
 def get_two_channel_performance(args):
 
     n = args[0][0]
-    o = args[0][1]
+    l = args[0][1]
     original_signal = args[0][2]
     c1 = args[0][3]
     c2 = args[0][4]
@@ -44,14 +45,15 @@ def get_two_channel_performance(args):
     i = args[1]
 
     shift = shifts[i]
-    Omega = omega_range[o]
+    noise_level = Figure11_noise_range[l]
     b = np.max(np.abs(original_signal)) + 1
     tem = timeEncoder(
         kappa, delta, b, [[1]]*2, integrator_init=[-delta, -delta + shift * delta]
     )
     sig = bandlimitedSignal(t, delta_t, Omega, sinc_locs=c1, sinc_amps=c2)
     z = tem.encode_precise(sig, Omega, end_time, tol=1e-15)
-    rec = tem.decode(z, t, Omega, delta_t, cond_n=1e-12)
+    z_corrupted = z.corrupt_with_gaussian(noise_level)
+    rec = tem.decode(z_corrupted, t, Omega, delta_t, cond_n=1e-12)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -61,7 +63,7 @@ def get_two_channel_performance(args):
 def get_single_channel_performance(args):
 
     n = args[0][0]
-    o = args[0][1]
+    l = args[0][1]
     original_signal = args[0][2]
     c1 = args[0][3]
     c2 = args[0][4]
@@ -72,12 +74,13 @@ def get_single_channel_performance(args):
     t = np.arange(0, end_time, delta_t)
     five_percent = int(len(t) * 0.05)
 
-    Omega = omega_range[o]
+    noise_level = Figure11_noise_range[l]
     b = np.max(np.abs(original_signal)) + 1
     tem = timeEncoder(kappa, delta, b, [[1]])
     sig = bandlimitedSignal(t, delta_t, Omega, sinc_locs=c1, sinc_amps=c2)
     z = tem.encode_precise(sig, Omega, end_time, tol=1e-15)
-    rec = tem.decode(z, t, Omega, delta_t, cond_n = 1e-12)
+    z_corrupted = z.corrupt_with_gaussian(noise_level)
+    rec = tem.decode(z_corrupted, t, Omega, delta_t, cond_n = 1e-12)
     err = np.linalg.norm((original_signal - rec)[five_percent:-five_percent]) / (
         len(t) * 0.9
     )
@@ -95,23 +98,22 @@ def GetData():
     delta_t = 1e-4
     t = np.arange(0, end_time, delta_t)
 
-    err_double = np.zeros((len(omega_range), len(shifts), n_trials))
-    err_single = np.zeros((len(omega_range), n_trials))
+    err_double = np.zeros((len(Figure11_noise_range), len(shifts), n_trials))
+    err_single = np.zeros((len(Figure11_noise_range), n_trials))
     five_percent = int(len(t) * 0.05)
 
     signals = []
     sinc_loc = []
     sinc_amp = []
 
-    tot_number_of_runs = len(omega_range) * len(shifts) * n_trials
+    tot_number_of_runs = len(Figure11_noise_range) * len(shifts) * n_trials
     run_tracker_divisor = int(tot_number_of_runs / 25) + 1
 
     for n in range(n_trials):
-        for o in range(len(omega_range)):
-            Omega = omega_range[o]
+        for l in range(len(Figure11_noise_range)):
             original_signal, c1, c2 = new_sig(t, delta_t, Omega)
             signals.append(
-                [n, o, original_signal, c1, c2, kappa, delta, end_time, delta_t]
+                [n, l, original_signal, c1, c2, kappa, delta, end_time, delta_t]
             )
             sinc_loc.append(c1)
             sinc_amp.append(c2)
@@ -131,19 +133,19 @@ def GetData():
         pool.close()
         pool.join()
 
-    err_double = np.reshape(err_double.get(), (n_trials, len(omega_range), len(shifts)))
+    err_double = np.reshape(err_double.get(), (n_trials, len(Figure11_noise_range), len(shifts)))
     err_double = np.transpose(err_double, (1, 2, 0))
-    err_single = np.reshape(err_single.get(), (n_trials, len(omega_range)))
+    err_single = np.reshape(err_single.get(), (n_trials, len(Figure11_noise_range)))
     err_single = np.transpose(err_single)
 
-    filename = Data_Path+"Figure10_VarShifts.pkl"
+    filename = Data_Path+"Figure11_b_VarSNR_VarShift.pkl"
     with open(filename, "wb") as f:  # Python 3: open(..., 'wb')
         pickle.dump(
             [
                 err_double,
                 err_single,
-                omega_range,
-                omega_range_string,
+                Figure11_noise_range,
+                SNR_range_string,
                 shifts,
                 shifts_range_string,
             ],
@@ -154,15 +156,15 @@ def GetData():
 def Generate():
 
 
-    data_filename = Data_Path+"Figure10_VarShifts.pkl"
+    data_filename = Data_Path+"Figure11_b_VarSNR_VarShift.pkl"
 
     with open(data_filename, "rb") as f:  # Python 3: open(..., 'wb')
         obj = pickle.load(f, encoding="latin1")
 
     err_double = obj[0]
     err_single = obj[1]
-    omega_range = obj[2]
-    omega_range_string = obj[3]
+    Figure11_noise_range = obj[2]
+    SNR_range_string = obj[3]
     shifts = obj[4]
     shifts_range_string = obj[5]
 
@@ -190,7 +192,7 @@ def Generate():
         data_aug[::-1, :],
         ax=axes,
         norm=log_norm,
-        yticklabels=omega_range_string[::-2],
+        yticklabels=SNR_range_string[::-1],
         xticklabels=shifts_range_string[::2],
         cbar_kws={"ticks": cbar_ticks[1:]},
     )
@@ -201,23 +203,22 @@ def Generate():
     axes = fig.gca()
     axes.set_xticks([0, 2, 4, 6, 8, 10, 12, 14, 16, 18])
     plt.yticks(rotation = 0)
-    axes.set_yticks([0.5, 2.5, 4.5, 6.5, 8.5, 10.5])
-    plt.ylim(len(omega_range),0)
+    # axes.set_yticks([0, 2, 4, 6, 8, 10])
     axes.vlines(17, *axes.get_ylim(), color="yellow", linestyle="--")
     fig.subplots_adjust(bottom=0.2)
 
 
     if To_Svg:
-        figure_filename = Figure_Path+"Figure10_VarShifts.svg"
+        figure_filename = Figure_Path+"Figure11_b_VarSNR_VarShift.svg"
         fig.savefig(figure_filename)
     else:
-        figure_filename = Figure_Path+"Figure10_VarShifts.png"
+        figure_filename = Figure_Path+"Figure11_b_VarSNR_VarShift.png"
         fig.savefig(figure_filename, dpi=600)
 
 
 if __name__ == "__main__":
 
-    data_filename = Data_Path+"Figure10_VarShifts.pkl"
+    data_filename = Data_Path+"Figure11_b_VarSNR_VarShift.pkl"
 
     if not os.path.isfile(data_filename):
         GetData()

@@ -139,8 +139,9 @@ def Generate():
     sns_map.set_xlabel('Number of Channels')
     sns_map.set_title('Reconstruction Error')
     plt.yticks(rotation = 0)
-    axes.set_yticks(np.arange(0,len(omega_range),2))
-    axes.vlines(21, *axes.get_ylim(), color = 'yellow', linestyle = '--')
+    axes.set_yticks(np.arange(0.5,len(omega_range)+0.5,2))
+    plt.ylim(20,0)
+    # axes.vlines(21, *axes.get_ylim(), color = 'yellow', linestyle = '--')
     fig.subplots_adjust(bottom = 0.2)
 
     if To_Svg:
